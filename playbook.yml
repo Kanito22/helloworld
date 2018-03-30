@@ -1,0 +1,31 @@
+- hosts: webservers
+  remote_user: ubuntu
+  vars_files:
+    - vars/main.yml
+  roles:
+    - { role: geerlingguy.nodejs, become: yes }   
+  tasks:
+    - name: Copy app to server
+      copy:
+        src: main.js
+        dest: /tmp/main.js
+
+    - name: "Install forever (to run Node.js app)."
+      npm: name=forever global=yes state=present
+      become: yes
+    
+#    - name: "Check list of Node.js apps running."
+#      command: forever list
+#      register: forever_list
+#      changed_when: false
+
+    - name: "Start example Node.js app."
+      command: forever start /tmp/main.js
+#      when: "forever_list.stdout.find('/tmp/main.js') == -1"
+
+    - name: "Restart example Node.js app."
+      command: forever restart /tmp/main.js
+#      when: "forever_list.stdout.find('/tmp/main.js') == -1"
+
+
+

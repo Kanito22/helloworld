@@ -1,0 +1,2 @@
+[webservers]
+34.242.63.164 ansible_python_interpreter="/usr/bin/python3"
